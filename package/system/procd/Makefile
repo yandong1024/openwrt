@@ -12,9 +12,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/procd.git
-PKG_MIRROR_HASH:=75a92c01ef85f41dc7e0b77ac35f464fbe45942af02ca6847516c4ebf574c4a4
-PKG_SOURCE_DATE:=2023-01-16
-PKG_SOURCE_VERSION:=190f13a75e67e0bdb662188da79b8be31e0aae01
+PKG_MIRROR_HASH:=cad8681f04922a3ba05363330a2896a598572a2beee980692f1cd7c8d7136b5e
+PKG_SOURCE_DATE:=2025-01-30
+PKG_SOURCE_VERSION:=7fcb5a275fcff5ab697357c86ce568c71128b982
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=GPL-2.0
@@ -40,7 +40,7 @@ CMAKE_OPTIONS += -DEARLY_PATH="$(TARGET_INIT_PATH)"
 define Package/procd/Default
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+ubusd +ubus +libjson-script +ubox +libubox \
+  DEPENDS:=+ubusd +ubus +libjson-script +ubox +libubox +libudebug \
 	  +libubus +libblobmsg-json +libjson-c +jshn
   TITLE:=OpenWrt system process manager
   USERID:=:dialout=20 :audio=29
@@ -71,7 +71,7 @@ endef
 define Package/procd-seccomp
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=@SECCOMP +libubox +libblobmsg-json
+  DEPENDS:=@USE_SECCOMP +libubox +libblobmsg-json
   TITLE:=OpenWrt process seccomp helper + utrace
 endef
 
