@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=arm-trusted-firmware-tools
-PKG_VERSION:=2.7
+PKG_VERSION:=2.12
 PKG_RELEASE:=1
-PKG_HASH:=53422dc649153838e03820330ba17cb10afe3e330ecde0db11e4d5f1361a33e6
+PKG_HASH:=b4c047493cac1152203e1ba121ae57267e4899b7bf56eb365e22a933342d31c9
 
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
 PKG_HOST_ONLY:=1
@@ -33,7 +33,8 @@ define Host/Compile
 	$(MAKE) -C \
 		$(HOST_BUILD_DIR)/tools/fiptool \
 		CPPFLAGS="$(HOST_CFLAGS)" \
-		LDFLAGS="$(HOST_LDFLAGS)"
+		LDFLAGS="$(HOST_LDFLAGS)" \
+		OPENSSL_DIR="$(STAGING_DIR_HOST)"
 endef
 
 define Host/Install
