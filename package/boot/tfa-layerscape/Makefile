@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tfa-layerscape
-PKG_VERSION:=21.08
-PKG_RELEASE:=$(AUTORELEASE)
+PKG_VERSION:=6.6.23.2.0.0
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://source.codeaurora.org/external/qoriq/qoriq-components/atf
-PKG_SOURCE_VERSION:=LSDK-21.08
-PKG_MIRROR_HASH:=893f2d28a77dcc9d4413a619b4719ca5f1f4dc78dd824a8488e7d543e66bcf95
+PKG_SOURCE_URL:=https://github.com/nxp-qoriq/atf
+PKG_SOURCE_VERSION:=lf-6.6.23-2.0.0
+PKG_MIRROR_HASH:=628a95ba60a593ae0575ee9ede1154445ec3a86a07b18e4947e06e13c2b67859
 PKG_BUILD_DEPENDS:=tfa-layerscape/host
 
 include $(INCLUDE_DIR)/host-build.mk
@@ -25,18 +25,19 @@ HOST_CFLAGS += -Wall -Werror -pedantic -std=c99
 define Host/Compile
 	$(MAKE) -C \
 		$(HOST_BUILD_DIR)/tools/fiptool \
+		PLAT_FIPTOOL_HELPER_MK="$(HOST_BUILD_DIR)/tools/fiptool/plat_fiptool/nxp/plat_fiptool.mk" \
 		CFLAGS="$(HOST_CFLAGS)" \
 		LDFLAGS="$(HOST_LDFLAGS)" \
 		HOSTCCFLAGS="$(HOST_CFLAGS)"
 	$(MAKE) -C \
-		$(HOST_BUILD_DIR)/tools/nxp \
+		$(HOST_BUILD_DIR)/tools/nxp/create_pbl \
 		CFLAGS="$(HOST_CFLAGS)"
 endef
 
 define Host/Install
 	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/fiptool/fiptool $(STAGING_DIR_HOST)/bin/fiptool-layerscape
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/nxp/create_pbl $(STAGING_DIR_HOST)/bin/tfa-create-pbl
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/nxp/byte_swap $(STAGING_DIR_HOST)/bin/tfa-byte-swap
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/nxp/create_pbl/create_pbl $(STAGING_DIR_HOST)/bin/tfa-create-pbl
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/nxp/create_pbl/byte_swap $(STAGING_DIR_HOST)/bin/tfa-byte-swap
 endef
 
 define Trusted-Firmware-A/Default
@@ -160,6 +161,7 @@ TFA_TARGETS := \
   lx2160a-rdb-sdboot
 
 TFA_MAKE_FLAGS += \
+	$(if $(CONFIG_BINUTILS_VERSION_2_37)$(CONFIG_BINUTILS_VERSION_2_38),,LDFLAGS="-no-warn-rwx-segments") \
 	fip pbl \
 	BOOT_MODE=$(BOOT_MODE) \
 	RCW=$(STAGING_DIR_IMAGE)/fsl_$(BUILD_VARIANT)-rcw.bin \

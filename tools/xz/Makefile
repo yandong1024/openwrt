@@ -7,12 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xz
-PKG_VERSION:=5.4.3
+PKG_VERSION:=5.6.4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@SF/lzmautils \
+PKG_SOURCE_URL:=https://github.com/tukaani-project/xz/releases/download/v$(PKG_VERSION) \
+		@SF/lzmautils \
 		http://tukaani.org/xz
-PKG_HASH:=9243a04598d7a70c1f567a0143a255581ac5c64b140fd55fd5cbc1e00b0e6f90
+PKG_HASH:=176d510c30d80a23b8050bbc048f2ecaacb823ae48b6821727ed6591f0df9200
 PKG_CPE_ID:=cpe:/a:tukaani:xz
 
 HOST_BUILD_PARALLEL:=1
